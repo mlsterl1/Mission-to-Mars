@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Mission to Mars</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Add Jumbotron to Header -->
+      <div class="jumbotron text-center" >
+        <h1>Mission to Mars</h1>
+        <!-- Add a button to activate scraping script -->
+        <p><a class="btn btn-primary btn-lg"  href="/scrape" role="button">Scrape New Data</a></p>
+      </div>
+      <!-- Add section for Mars News -->
+      <div class="row" id="mars-news">
+        <div class="col-md-12">
+          <div class="media">
+            <div class="media-body">
+              <h2>Latest Mars News</h2>
+              <h4 class="media-heading">{{ mars.news_title }}</h4>
+              <p>{{ mars.news_paragraph }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+        <!-- Section for Featured Image and Facts table -->
+        <div class="row" id="mars-featured-image" style="float: left">
+          <div class="col-md-8 text-center">
+            <h2>Featured Mars Image</h2>
+            <img
+              src="{{mars.featured_image}}"
+              class="img-responsive"
+              alt="Responsive image"/>
+          </div>
+          <!-- Mars Facts -->
+          <div class="row text-center" id="mars-facts"style="float: right; ">
+            <h4>Mars Facts</h4>
+            {{ mars.facts | safe }}
+          </div>
+        <!-- Hemispheres -->
+        <div class="row" id="Mars-Four-Hemisphere">
+          <div class="col-md-8 text-center">
+            <h3>Mars Four Hemispheres</h3>
+            <div class="row">
+              {% for item in mars.mars_hemi_images %}
+              <div class="col-md-3">
+                <div class="thumbnail">
+                <img
+                    src="{{item.img_url}}"
+                    class="img-responsive"
+                    width=100%
+                    />
+                <div class="caption">
+                    <h3>{{item.title}}</h3>
+                </div>
+                </div>
+              </div>
+              {% endfor %}
+              </div>
+            </div>
+          </div>
+          <!-- <div class="col-md-4">
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html> 

@@ -18,10 +18,12 @@ def scrape_all():
       "news_paragraph": news_paragraph,
       "featured_image": featured_image(browser),
       "facts": mars_facts(),
+      "mars_hemi_images" : mars_hemi_images(browser),
       "last_modified": dt.datetime.now()
-}
+    }
 
     # Stop webdriver and return data
+
     browser.quit()
     return data
 
@@ -99,8 +101,33 @@ def mars_facts():
     # Convert dataframe into HTML format, add bootstrap
     return df.to_html(classes="table table-striped")
 
-if __name__ == "__main__":
 
+def scrape_hemi(html_text):
+    hemi_soup = BeautifulSoup(html_text, "html.parser")
+    try:
+        title = hemi_soup.find("h2", class_="title").get_text()
+        sample = hemi_soup.find("a", text="Sample").get("href")
+    except AttributeError:
+        title, sample = None, None
+
+    return {"title": title, "img_url":sample}
+
+def mars_hemi_images(browser):
+    # Visit hemispheres website through splinter module 
+    hemispheres_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+    browser.visit(hemispheres_url)
+
+    hemisphere_image_urls = []
+    for i in range(4):
+        browser.find_by_css("a.product-item h3")[i].click()
+        hemi_data = scrape_hemi(browser.html)
+        hemisphere_image_urls.append(hemi_data)
+        browser.back()
+
+    return hemisphere_image_urls
+
+    
+if __name__ == "__main__":
     # If running as script, print scraped data
     print(scrape_all())
 
